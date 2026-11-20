@@ -1,0 +1,218 @@
+{
+ "picks": [
+  {
+   "date": "2026-11-20",
+   "ticket": "solide",
+   "eid": "401909306",
+   "aid": "4702382",
+   "nom": "Tristan da Silva",
+   "eq": "ORL",
+   "m": "pts",
+   "k": 10,
+   "cote": 1.47,
+   "estim": false,
+   "p": 0.79,
+   "res": null
+  },
+  {
+   "date": "2026-11-20",
+   "ticket": "solide",
+   "eid": "401909306",
+   "aid": "4712849",
+   "nom": "Anthony Black",
+   "eq": "ORL",
+   "m": "ast",
+   "k": 5,
+   "cote": 1.78,
+   "estim": false,
+   "p": 0.658,
+   "res": null
+  },
+  {
+   "date": "2026-11-20",
+   "ticket": "solide",
+   "eid": "401909305",
+   "aid": "4431680",
+   "nom": "Onyeka Okongwu",
+   "eq": "ATL",
+   "m": "pts",
+   "k": 12,
+   "cote": 1.38,
+   "estim": false,
+   "p": 0.781,
+   "res": null
+  },
+  {
+   "date": "2026-11-20",
+   "ticket": "solide",
+   "eid": "401909313",
+   "aid": "4433137",
+   "nom": "Ziaire Williams",
+   "eq": "LAL",
+   "m": "pts",
+   "k": 6,
+   "cote": 1.39,
+   "estim": false,
+   "p": 0.773,
+   "res": null
+  },
+  {
+   "date": "2026-11-20",
+   "ticket": "solide",
+   "eid": "401909305",
+   "aid": "4397183",
+   "nom": "Aaron Wiggins",
+   "eq": "ATL",
+   "m": "pts",
+   "k": 10,
+   "cote": 1.38,
+   "estim": false,
+   "p": 0.776,
+   "res": null
+  },
+  {
+   "date": "2026-11-20",
+   "ticket": "solide",
+   "eid": "401909308",
+   "aid": "4432241",
+   "nom": "Jamal Shead",
+   "eq": "TOR",
+   "m": "ast",
+   "k": 5,
+   "cote": 1.61,
+   "estim": false,
+   "p": 0.69,
+   "res": null
+  }
+ ],
+ "tickets": [
+  {
+   "date": "2026-11-20",
+   "type": "fun",
+   "cote": 51.44,
+   "legs": [
+    {
+     "date": "2026-11-20",
+     "ticket": "fun",
+     "eid": "401909306",
+     "aid": "4702382",
+     "nom": "Tristan da Silva",
+     "eq": "ORL",
+     "m": "tpm",
+     "k": 3,
+     "cote": 2.17,
+     "estim": false,
+     "p": 0.586,
+     "res": null
+    },
+    {
+     "date": "2026-11-20",
+     "ticket": "fun",
+     "eid": "401909308",
+     "aid": "4432241",
+     "nom": "Jamal Shead",
+     "eq": "TOR",
+     "m": "ast",
+     "k": 6,
+     "cote": 2.2,
+     "estim": false,
+     "p": 0.564,
+     "res": null
+    },
+    {
+     "date": "2026-11-20",
+     "ticket": "fun",
+     "eid": "401909309",
+     "aid": "5174563",
+     "nom": "Kyshawn George",
+     "eq": "WSH",
+     "m": "tpm",
+     "k": 3,
+     "cote": 2.27,
+     "estim": false,
+     "p": 0.49,
+     "res": null
+    },
+    {
+     "date": "2026-11-20",
+     "ticket": "fun",
+     "eid": "401909310",
+     "aid": "4397136",
+     "nom": "Saddiq Bey",
+     "eq": "NO",
+     "m": "ast",
+     "k": 3,
+     "cote": 2.35,
+     "estim": false,
+     "p": 0.506,
+     "res": null
+    },
+    {
+     "date": "2026-11-20",
+     "ticket": "fun",
+     "eid": "401909313",
+     "aid": "3945274",
+     "nom": "Luka Doncic",
+     "eq": "LAL",
+     "m": "tpm",
+     "k": 5,
+     "cote": 2.02,
+     "estim": false,
+     "p": 0.561,
+     "res": null
+    }
+   ],
+   "res": null
+  },
+  {
+   "date": "2026-11-20",
+   "type": "safe",
+   "cote": 1.8,
+   "legs": [
+    {
+     "date": "2026-11-20",
+     "ticket": "safe",
+     "eid": "401909306",
+     "aid": "4702382",
+     "nom": "Tristan da Silva",
+     "eq": "ORL",
+     "m": "pts",
+     "k": 8,
+     "cote": 1.24,
+     "estim": false,
+     "p": 0.874,
+     "res": null
+    },
+    {
+     "date": "2026-11-20",
+     "ticket": "safe",
+     "eid": "401909312",
+     "aid": "2991230",
+     "nom": "Fred VanVleet",
+     "eq": "HOU",
+     "m": "pts",
+     "k": 8,
+     "cote": 1.2,
+     "estim": false,
+     "p": 0.857,
+     "res": null
+    },
+    {
+     "date": "2026-11-20",
+     "ticket": "safe",
+     "eid": "401909305",
+     "aid": "4431680",
+     "nom": "Onyeka Okongwu",
+     "eq": "ATL",
+     "m": "pts",
+     "k": 10,
+     "cote": 1.21,
+     "estim": false,
+     "p": 0.851,
+     "res": null
+    }
+   ],
+   "res": null
+  }
+ ]
+}
