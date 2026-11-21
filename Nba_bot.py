@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-BOT NBA · PROPS JOUEURS · v1.1
+BOT NBA · PROPS JOUEURS · v1.2
 Marchés : points, rebonds, passes, PRA (points+rebonds+passes), paniers à 3 points.
 Tickets : pronos solides, combiné fun (grosse cote), ticket safe + texte prêt pour X.
 v1.1 : filtre minutes stables, titulaires, retours de blessure (bilan 20-21 nov).
+v1.2 : le combiné fun vise une cote 30+ avec des jambes confirmées (rôle / minutes / forme).
+       Si 30 n'est pas atteignable proprement, on publie le meilleur ticket solide, sans pile-ou-face.
 
 100 % gratuit, aucune clé API :
   - ESPN (JSON public) : calendrier, box scores, spreads/totaux, blessures, et les vraies
@@ -45,12 +47,14 @@ SOLIDES_COTE_MIN = 1.30
 SOLIDES_VALUE_MIN = 0.02        # proba x cote >= 1.02
 SOLIDES_MAX_PAR_MATCH = 2
 
-FUN_COTE_CIBLE = 50.0           # cote totale visée
-FUN_LEGS = (4, 5)               # 4 ou 5 sélections, matchs différents
-FUN_COTE_LEG = (1.65, 8.0)      # cote d'une sélection du combiné fun
-FUN_PROBA_LEG_MIN = 0.22
+FUN_COTE_CIBLE = 30.0           # v1.2 : cote totale visée (30 minimum, plus de cible 50 ni 8)
+FUN_LEGS = (4, 5, 6, 7)         # jusqu'à 7 sélections, 1 par match ; un soir à 6-7 matchs peut viser 30
+FUN_LEGS_REPLI = 3              # s'il n'y a que 3 matchs propres, on publie un ticket court plutôt que rien
+FUN_COTE_LEG = (1.65, 8.0)      # lignes un peu plus hautes (souvent 1.80-2.50) pour construire la cote
+FUN_PROBA_LEG_MIN = 0.50        # v1.2 : 50 % (plus de pile-ou-face à 22 %) ; 45 % trop fragile
 FUN_VALUE_MIN = -0.04           # le modèle ne doit pas être (beaucoup) moins optimiste que le book
 FUN_CHOIX_PAR_MATCH = 12
+FUN_HITS_MIN = 6                # hits min sur les 10 derniers (si au moins 8 matchs)
 
 SAFE_PROBA_MIN = 0.80
 SAFE_COTE_MAX = 1.55
@@ -63,11 +67,11 @@ FENETRE_HEURES = 16             # matchs qui commencent dans les 16 prochaines h
 
 # v1.1 — filtres rôle / minutes (après le bilan du 20-21 novembre)
 MINUTES_SOLIDE_SAFE = 26.0      # moyenne des 5 derniers matchs (pronos solides + ticket safe)
-MINUTES_FUN = 24.0              # idem, un peu plus souple pour le combiné fun
+MINUTES_FUN = 26.0              # v1.2 : même exigence que les solides / le safe
 MINUTES_PLANCHER_L5 = 18.0      # aucun des 5 derniers matchs sous 18 minutes
 MINUTES_STD_MAX = 6.0           # écart-type (population) des 5 derniers
 TROUS_MAX_SOLIDE_SAFE = 0       # aucun match d'équipe manqué sur les 5 derniers (retour blessure)
-TROUS_MAX_FUN = 1               # fun : au plus 1 absence récente
+TROUS_MAX_FUN = 0               # v1.2 : plus de retour d'absence dans le fun
 SAFE_BLOWOUT_SPREAD = 10.5      # ticket safe : pas de favori à -10.5 ou plus
 FUN_TPM_BLOWOUT = 12.5          # fun : pas de 3-pts si favori à -12.5 ou plus
 SOLIDES_TPM_BLOWOUT = 10.5      # solides : pas de 3-pts si favori à -10.5 ou plus
@@ -697,7 +701,7 @@ def favori_souffrant(c, seuil):
 
 
 def raison_ecart(c, ticket):
-    """Pourquoi écarter cette sélection du ticket, ou None si elle passe le filtre v1.1."""
+    """Pourquoi écarter cette sélection du ticket, ou None si elle passe le filtre v1.2."""
     if minutes_limitees(c.get("statut"), c.get("commentaire")):
         return "minutes limitées / retour blessure"
     plancher = MINUTES_SOLIDE_SAFE if ticket in ("solide", "safe") else MINUTES_FUN
@@ -710,13 +714,15 @@ def raison_ecart(c, ticket):
     trous_max = TROUS_MAX_SOLIDE_SAFE if ticket in ("solide", "safe") else TROUS_MAX_FUN
     if c.get("trous") is not None and c["trous"] > trous_max:
         return f"retour d'absence ({c.get('trous')} matchs manqués)"
-    if ticket in ("solide", "safe") and "titulaire" in c and not c["titulaire"]:
+    if ticket in ("solide", "safe", "fun") and "titulaire" in c and not c["titulaire"]:
         return "pas titulaire (moins de 3 titularisations sur 5)"
     n10, hits = c.get("n10") or 0, c.get("hits10") or 0
     if ticket == "solide" and n10 >= 8 and hits < SOLIDES_HITS_MIN:
         return f"hit-rate L10 {hits}/{n10} < {SOLIDES_HITS_MIN}"
     if ticket == "safe" and n10 >= 8 and hits < SAFE_HITS_MIN:
         return f"hit-rate L10 {hits}/{n10} < {SAFE_HITS_MIN}"
+    if ticket == "fun" and n10 >= 8 and hits < FUN_HITS_MIN:
+        return f"hit-rate L10 {hits}/{n10} < {FUN_HITS_MIN}"
     if ticket == "safe" and c.get("m") == "tpm":
         return "marché 3-pts trop volatile pour le ticket safe"
     if ticket == "safe" and favori_souffrant(c, SAFE_BLOWOUT_SPREAD):
@@ -725,6 +731,10 @@ def raison_ecart(c, ticket):
         return "3-pts + favori à gros écart"
     if ticket == "fun" and c.get("m") == "tpm" and favori_souffrant(c, FUN_TPM_BLOWOUT):
         return "3-pts + favori à très gros écart"
+    if ticket == "fun":
+        notes = c.get("notes") or []
+        if "back-to-back" in notes and "risque blowout" in notes:
+            return "back-to-back + risque blowout"
     return None
 
 
@@ -1009,17 +1019,33 @@ def ticket_safe(cands, exclure=()):
     return choix if len(choix) >= 2 else []
 
 
-def combine_fun(cands):
-    """Combinaison la plus probable (1 sélection par match) qui atteint FUN_COTE_CIBLE."""
+def combine_fun(cands, exclure=(), prefer_exclure=()):
+    """Combinaison la plus probable (1 sélection par match) qui atteint FUN_COTE_CIBLE.
+
+    exclure : joueurs interdits (déjà sur le ticket safe).
+    prefer_exclure : joueurs déjà en solides, écartés s'il reste une autre option dans le match.
+    Si un match n'a aucune autre jambe recevable, on les garde (ticket plus long, pas de jambe faible).
+    S'il n'y a pas assez de matchs solides pour viser 30, on rend le meilleur ticket propre (3+) ou rien.
+    """
+    interdits = set(exclure)
     ok = [c for c in cands if FUN_COTE_LEG[0] <= c["cote"] <= FUN_COTE_LEG[1]
           and c["p"] >= FUN_PROBA_LEG_MIN and c["value"] >= FUN_VALUE_MIN
+          and c["aid"] not in interdits
           and passe_filtre(c, "fun")]
     par_match = {}
-    # titulaires d'abord, puis proba : le fun reste explosif mais s'appuie sur un rôle stable
+    # titulaires d'abord, puis proba ; plusieurs paliers d'un même marché restent possibles
     for c in sorted(ok, key=lambda c: (c.get("titulaire", False), c["p"]), reverse=True):
         l = par_match.setdefault(c["eid"], [])
-        if len(l) < FUN_CHOIX_PAR_MATCH and all(x["aid"] != c["aid"] or x["m"] != c["m"] for x in l):
+        cle = (c["aid"], c.get("m"), c.get("k"), c["cote"])
+        if len(l) < FUN_CHOIX_PAR_MATCH and all(
+                (x["aid"], x.get("m"), x.get("k"), x["cote"]) != cle for x in l):
             l.append(c)
+    eviter = set(prefer_exclure)
+    for eid, options in list(par_match.items()):
+        sans = [c for c in options if c["aid"] not in eviter]
+        par_match[eid] = sans if sans else options
+        if not par_match[eid]:
+            del par_match[eid]
     cible = math.log(FUN_COTE_CIBLE)
     pas = 0.04
     # état : (nb, case_cote) -> (log_p, log_cote, legs)
@@ -1037,7 +1063,13 @@ def combine_fun(cands):
                 if cle not in nouveaux or nouveaux[cle][0] < nlp:
                     nouveaux[cle] = (nlp, nlc, legs + [c])
         etats = nouveaux
-    tailles = set(FUN_LEGS) if len(par_match) >= min(FUN_LEGS) else ({len(par_match)} if len(par_match) >= 3 else set())
+    n_matchs = len(par_match)
+    if n_matchs >= min(FUN_LEGS):
+        tailles = {n for n in FUN_LEGS if n <= n_matchs}
+    elif n_matchs >= FUN_LEGS_REPLI:
+        tailles = {n_matchs}          # ticket plus court, la cible 30 ne sera en général pas atteinte
+    else:
+        tailles = set()               # pas assez de matchs propres : on ne comble pas avec une jambe faible
     meilleur, repli = None, None
     for (n, b), (lp, lc, legs) in etats.items():
         if n not in tailles:
@@ -1115,7 +1147,8 @@ def message_principal(jour_et, nb_matchs, solides, fun, fun_ok, safe, bilan, sou
             L += [bloc_leg(i, c)]
         L += ["", f"💰 Cote totale : <b>{cote_totale(fun):.2f}</b> · 📊 chance estimée ≈ {chance_totale(fun) * 100:.1f} %"]
         if not fun_ok:
-            L += [f"<i>Pas de combinaison cohérente à {FUN_COTE_CIBLE:g}+ ce soir : voici la meilleure possible.</i>"]
+            L += [f"<i>Pas de combinaison cohérente à {FUN_COTE_CIBLE:g}+ ce soir : voici la meilleure possible "
+                  f"(pas de jambe faible juste pour gonfler la cote).</i>"]
         L += ["<i>Ticket fun : petite mise.</i>"]
     else:
         L += ["Pas assez de matchs / sélections pour un combiné cohérent."]
@@ -1377,8 +1410,10 @@ def main():
     if cands:
         resumer_filtres(cands)
     solides = pronos_solides(cands)
-    fun, fun_ok = combine_fun(cands)
     safe = ticket_safe(cands)
+    fun, fun_ok = combine_fun(cands,
+                              exclure={c["aid"] for c in safe},
+                              prefer_exclure={c["aid"] for c in solides})
 
     sources = "ESPN, gratuit" if any(props.values()) else "aucune ligne trouvée"
     msg = message_principal(matchs[0]["jour_et"], len(matchs), solides, fun, fun_ok, safe, bilan, sources)
