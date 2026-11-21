@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-BOT NBA · PROPS JOUEURS · v1
+BOT NBA · PROPS JOUEURS · v1.1
 Marchés : points, rebonds, passes, PRA (points+rebonds+passes), paniers à 3 points.
 Tickets : pronos solides, combiné fun (grosse cote), ticket safe + texte prêt pour X.
+v1.1 : filtre minutes stables, titulaires, retours de blessure (bilan 20-21 nov).
 
 100 % gratuit, aucune clé API :
   - ESPN (JSON public) : calendrier, box scores, spreads/totaux, blessures, et les vraies
@@ -11,7 +12,8 @@ Tickets : pronos solides, combiné fun (grosse cote), ticket safe + texte prêt 
   - The Odds API N'EST PAS utilisée (les props coûteraient ~45 crédits par soir).
 Données calculées par le bot (box scores de la saison, gardés dans data_nba/) :
   minutes, forme 5/10 matchs, moyenne saison, usage, défense adverse par poste, rythme (pace),
-  domicile/extérieur, back-to-back, risque de « blowout » (spread), coéquipiers absents.
+  domicile/extérieur, back-to-back, risque de « blowout » (spread), coéquipiers absents,
+  stabilité des minutes et statut de titulaire.
 """
 import json
 import math
@@ -55,9 +57,27 @@ SAFE_COTE_MAX = 1.55
 SAFE_LEGS_MAX = 3
 SAFE_PROBA_3E = 0.84            # 3e sélection seulement si elle est très sûre
 
-MINUTES_MIN = 22                # minutes projetées minimum
+MINUTES_MIN = 22                # minutes projetées minimum (premier filet, tous tickets)
 MATCHS_MIN = 5                  # matchs joués minimum cette saison
 FENETRE_HEURES = 16             # matchs qui commencent dans les 16 prochaines heures
+
+# v1.1 — filtres rôle / minutes (après le bilan du 20-21 novembre)
+MINUTES_SOLIDE_SAFE = 26.0      # moyenne des 5 derniers matchs (pronos solides + ticket safe)
+MINUTES_FUN = 24.0              # idem, un peu plus souple pour le combiné fun
+MINUTES_PLANCHER_L5 = 18.0      # aucun des 5 derniers matchs sous 18 minutes
+MINUTES_STD_MAX = 6.0           # écart-type (population) des 5 derniers
+TROUS_MAX_SOLIDE_SAFE = 0       # aucun match d'équipe manqué sur les 5 derniers (retour blessure)
+TROUS_MAX_FUN = 1               # fun : au plus 1 absence récente
+SAFE_BLOWOUT_SPREAD = 10.5      # ticket safe : pas de favori à -10.5 ou plus
+FUN_TPM_BLOWOUT = 12.5          # fun : pas de 3-pts si favori à -12.5 ou plus
+SOLIDES_TPM_BLOWOUT = 10.5      # solides : pas de 3-pts si favori à -10.5 ou plus
+SOLIDES_HITS_MIN = 7            # hits min sur les 10 derniers (si au moins 8 matchs)
+SAFE_HITS_MIN = 8
+MOTS_MINUTES_LIMITEES = (
+    "minutes restriction", "minute restriction", "will be limited", "limited minutes",
+    "minutes limit", "on a minutes", "maintenance", "first game back", "just returned",
+    "returning from", "return from injury", "re-evaluation",
+)
 
 CALIBRATION = 0.92              # mesuré : 94 % annoncés -> 89 % réels avant correction
 POIDS_MODELE = 0.65             # proba finale = 65 % modèle + 35 % marché (cote DK sans marge)
@@ -629,8 +649,12 @@ def profil_joueur(idx, aid):
     def taux(sous, m):
         s_min = sum(r[3] for r in sous)
         return sum(val_stat(r, m) for r in sous) / s_min if s_min > 0 else 0.0
+    mins5 = mins[-5:]
+    std5 = (math.sqrt(sum((x - moyenne(mins5)) ** 2 for x in mins5) / len(mins5))
+            if len(mins5) >= 2 else 0.0)
     p = {"n": len(rows), "l": l, "tid": l[-1]["tid"], "pos": rows[-1][2],
-         "min_s": moyenne(mins), "min_10": moyenne(mins[-10:]), "min_5": moyenne(mins[-5:]),
+         "min_s": moyenne(mins), "min_10": moyenne(mins[-10:]), "min_5": moyenne(mins5),
+         "min_vals5": mins5, "min_std_5": std5, "min_plancher_5": min(mins5) if mins5 else 0.0,
          "usage": moyenne([r[8] + 0.44 * r[9] + r[10] for r in rows[-10:]]),
          "titulaire": sum(r[11] for r in rows[-5:]) >= 3}
     for m in ("pts", "reb", "ast", "tpm", "pra"):
@@ -646,6 +670,97 @@ def profil_joueur(idx, aid):
         p[m]["t_dom"], p[m]["n_dom"] = taux(dom, m), len(dom)
         p[m]["t_ext"], p[m]["n_ext"] = taux(ext, m), len(ext)
     return p
+
+
+
+def matchs_manques(idx, pr, n=5):
+    """Nombre de matchs de son équipe actuelle, parmi les n derniers, que le joueur a manqués."""
+    team = idx["equipes"].get(pr["tid"], [])[-n:]
+    joues = {x["gid"] for x in pr["l"]}
+    return sum(1 for g in team if g["gid"] not in joues)
+
+
+def commentaire_blessure(aid, nom, inj_id, inj_nom):
+    pair = inj_id.get(aid) or inj_nom.get(norm_nom(nom))
+    return (pair[1] if pair else "") or ""
+
+
+def minutes_limitees(statut, commentaire=""):
+    t = f"{statut or ''} {commentaire or ''}".lower()
+    return any(m in t for m in MOTS_MINUTES_LIMITEES)
+
+
+def favori_souffrant(c, seuil):
+    """True si le joueur est dans l'équipe favorite avec un spread >= seuil."""
+    sp, fav, eq = c.get("spread"), c.get("fav"), c.get("eq")
+    return sp is not None and fav and eq and sp >= seuil and fav == eq
+
+
+def raison_ecart(c, ticket):
+    """Pourquoi écarter cette sélection du ticket, ou None si elle passe le filtre v1.1."""
+    if minutes_limitees(c.get("statut"), c.get("commentaire")):
+        return "minutes limitées / retour blessure"
+    plancher = MINUTES_SOLIDE_SAFE if ticket in ("solide", "safe") else MINUTES_FUN
+    if c.get("min_5") is not None and c["min_5"] < plancher:
+        return f"minutes L5 {c.get('min_5', 0):.1f} < {plancher:g}"
+    if c.get("min_plancher_5") is not None and c["min_plancher_5"] < MINUTES_PLANCHER_L5:
+        return f"un match sous {MINUTES_PLANCHER_L5:g} min"
+    if c.get("min_std_5") is not None and c["min_std_5"] > MINUTES_STD_MAX:
+        return f"minutes instables (écart-type {c.get('min_std_5', 0):.1f} > {MINUTES_STD_MAX:g})"
+    trous_max = TROUS_MAX_SOLIDE_SAFE if ticket in ("solide", "safe") else TROUS_MAX_FUN
+    if c.get("trous") is not None and c["trous"] > trous_max:
+        return f"retour d'absence ({c.get('trous')} matchs manqués)"
+    if ticket in ("solide", "safe") and "titulaire" in c and not c["titulaire"]:
+        return "pas titulaire (moins de 3 titularisations sur 5)"
+    n10, hits = c.get("n10") or 0, c.get("hits10") or 0
+    if ticket == "solide" and n10 >= 8 and hits < SOLIDES_HITS_MIN:
+        return f"hit-rate L10 {hits}/{n10} < {SOLIDES_HITS_MIN}"
+    if ticket == "safe" and n10 >= 8 and hits < SAFE_HITS_MIN:
+        return f"hit-rate L10 {hits}/{n10} < {SAFE_HITS_MIN}"
+    if ticket == "safe" and c.get("m") == "tpm":
+        return "marché 3-pts trop volatile pour le ticket safe"
+    if ticket == "safe" and favori_souffrant(c, SAFE_BLOWOUT_SPREAD):
+        return "favori à gros écart (risque blowout)"
+    if ticket == "solide" and c.get("m") == "tpm" and favori_souffrant(c, SOLIDES_TPM_BLOWOUT):
+        return "3-pts + favori à gros écart"
+    if ticket == "fun" and c.get("m") == "tpm" and favori_souffrant(c, FUN_TPM_BLOWOUT):
+        return "3-pts + favori à très gros écart"
+    return None
+
+
+def passe_filtre(c, ticket):
+    return raison_ecart(c, ticket) is None
+
+
+def resumer_filtres(cands):
+    """Log des joueurs qui n'ont aucune sélection recevable sur un ticket."""
+    par_joueur = {}
+    for c in cands:
+        par_joueur.setdefault(c["aid"], []).append(c)
+    lignes = []
+    comptes = {}
+    for ticket, lib in (("solide", "solides"), ("safe", "safe"), ("fun", "fun")):
+        n = 0
+        for aid, cs in par_joueur.items():
+            raisons = [raison_ecart(c, ticket) for c in cs]
+            if any(r is None for r in raisons):
+                continue
+            # toutes les lignes échouent : on affiche une raison de rôle / minutes
+            # (le hit-rate dépend du palier, donc il est moins parlant ici)
+            priorite = ("minutes limitées", "absence", "titulaire", "sous ", "instables", "minutes L5",
+                        "3-pts", "blowout", "hit-rate")
+            elues = [r for r in raisons if r]
+            r = next((x for prio in priorite for x in elues if prio in x), elues[0])
+            n += 1
+            c0 = cs[0]
+            lignes.append(f"  · {c0['nom']} ({c0['eq']}) écarté ({lib}) : {r}")
+        comptes[lib] = n
+    print(f"Filtre v1.1 : {comptes['solides']} joueur(s) sans jambe solide, "
+          f"{comptes['safe']} sans jambe safe, {comptes['fun']} sans jambe fun")
+    for L in lignes:
+        print(L)
+    return lignes
+
 
 
 def absents_equipe(idx, tid, actifs_statut, jour_et):
@@ -781,7 +896,7 @@ def paliers_estimes(mu, disp, m):
 
 
 # ---------------------------------------------------------------- CANDIDATS
-def candidats(idx, matchs, props, statuts):
+def candidats(idx, matchs, props, statuts, commentaires=None):
     ctx = {"b2b": {}, "absents": {}, "rotation": {}}
     profils = {}
     for mt in matchs:
@@ -808,6 +923,7 @@ def candidats(idx, matchs, props, statuts):
         ctx["rotation"][tid] = rot
 
     noms = idx["cache"]["noms"]
+    commentaires = commentaires or {}
     res = []
     for mt in matchs:
         pm = props.get(mt["id"]) or {}
@@ -847,7 +963,12 @@ def candidats(idx, matchs, props, statuts):
                             "p": p, "p_mod": p_mod, "value": p * cote - 1, "mu": mu, "mp": mp,
                             "moy10": pr[m]["10"], "hits10": sum(1 for v in pr[m]["vals10"] if v >= k),
                             "n10": len(pr[m]["vals10"]), "notes": notes, "statut": st,
+                            "commentaire": commentaires.get(aid, ""),
                             "debut": mt["debut"].isoformat(),
+                            "titulaire": pr["titulaire"], "min_5": pr["min_5"],
+                            "min_std_5": pr["min_std_5"], "min_plancher_5": pr["min_plancher_5"],
+                            "trous": matchs_manques(idx, pr),
+                            "spread": mt.get("spread"), "fav": mt.get("fav"),
                         })
     return res
 
@@ -855,7 +976,8 @@ def candidats(idx, matchs, props, statuts):
 # ---------------------------------------------------------------- TICKETS
 def pronos_solides(cands):
     ok = [c for c in cands if c["p"] >= SOLIDES_PROBA_MIN and c["cote"] >= SOLIDES_COTE_MIN
-          and c["value"] >= SOLIDES_VALUE_MIN and c["p_mod"] >= SOLIDES_PROBA_MIN]
+          and c["value"] >= SOLIDES_VALUE_MIN and c["p_mod"] >= SOLIDES_PROBA_MIN
+          and passe_filtre(c, "solide")]
     ok.sort(key=lambda c: (c["value"] * 0.6 + c["p"] * 0.4), reverse=True)
     choix, joueurs, par_match = [], set(), {}
     for c in ok:
@@ -871,7 +993,7 @@ def pronos_solides(cands):
 
 def ticket_safe(cands, exclure=()):
     ok = [c for c in cands if c["p"] >= SAFE_PROBA_MIN and c["p_mod"] >= SAFE_PROBA_MIN
-          and COTE_MIN <= c["cote"] <= SAFE_COTE_MAX]
+          and COTE_MIN <= c["cote"] <= SAFE_COTE_MAX and passe_filtre(c, "safe")]
     ok.sort(key=lambda c: (c["p"], c["cote"]), reverse=True)
     choix, matchs, joueurs = [], set(), set()
     for c in ok:
@@ -890,9 +1012,11 @@ def ticket_safe(cands, exclure=()):
 def combine_fun(cands):
     """Combinaison la plus probable (1 sélection par match) qui atteint FUN_COTE_CIBLE."""
     ok = [c for c in cands if FUN_COTE_LEG[0] <= c["cote"] <= FUN_COTE_LEG[1]
-          and c["p"] >= FUN_PROBA_LEG_MIN and c["value"] >= FUN_VALUE_MIN]
+          and c["p"] >= FUN_PROBA_LEG_MIN and c["value"] >= FUN_VALUE_MIN
+          and passe_filtre(c, "fun")]
     par_match = {}
-    for c in sorted(ok, key=lambda c: c["p"], reverse=True):
+    # titulaires d'abord, puis proba : le fun reste explosif mais s'appuie sur un rôle stable
+    for c in sorted(ok, key=lambda c: (c.get("titulaire", False), c["p"]), reverse=True):
         l = par_match.setdefault(c["eid"], [])
         if len(l) < FUN_CHOIX_PAR_MATCH and all(x["aid"] != c["aid"] or x["m"] != c["m"] for x in l):
             l.append(c)
@@ -1238,15 +1362,20 @@ def main():
 
     inj_nom, inj_id = blessures_espn()
     officiel = blessures_officielles(maintenant.astimezone(TZ_ET))
-    statuts = {}
+    statuts, commentaires = {}, {}
     for aid, info in cache["noms"].items():
         st = statut_joueur(aid, info[0], inj_id, inj_nom, officiel)
         if st:
             statuts[aid] = st
+        com = commentaire_blessure(aid, info[0], inj_id, inj_nom)
+        if com:
+            commentaires[aid] = com
     print(f"Blessures : ESPN {len(inj_id)} · officiel {len(officiel)} · signalés {len(statuts)}")
 
-    cands = candidats(idx, matchs, props, statuts)
+    cands = candidats(idx, matchs, props, statuts, commentaires)
     print(f"Sélections possibles : {len(cands)}")
+    if cands:
+        resumer_filtres(cands)
     solides = pronos_solides(cands)
     fun, fun_ok = combine_fun(cands)
     safe = ticket_safe(cands)
