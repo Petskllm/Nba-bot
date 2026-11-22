@@ -59,6 +59,90 @@
    "p": 0.699,
    "res": "perdu",
    "val": 2
+  },
+  {
+   "date": "2026-11-22",
+   "ticket": "solide",
+   "eid": "401910030",
+   "aid": "4278053",
+   "nom": "Davion Mitchell",
+   "eq": "MIA",
+   "m": "pts",
+   "k": 12,
+   "cote": 1.42,
+   "estim": false,
+   "p": 0.802,
+   "res": null
+  },
+  {
+   "date": "2026-11-22",
+   "ticket": "solide",
+   "eid": "401910031",
+   "aid": "4712849",
+   "nom": "Anthony Black",
+   "eq": "ORL",
+   "m": "ast",
+   "k": 5,
+   "cote": 1.63,
+   "estim": false,
+   "p": 0.718,
+   "res": null
+  },
+  {
+   "date": "2026-11-22",
+   "ticket": "solide",
+   "eid": "401910034",
+   "aid": "3934672",
+   "nom": "Jalen Brunson",
+   "eq": "NY",
+   "m": "tpm",
+   "k": 3,
+   "cote": 1.74,
+   "estim": false,
+   "p": 0.675,
+   "res": null
+  },
+  {
+   "date": "2026-11-22",
+   "ticket": "solide",
+   "eid": "401910031",
+   "aid": "4066320",
+   "nom": "Desmond Bane",
+   "eq": "ORL",
+   "m": "tpm",
+   "k": 3,
+   "cote": 1.43,
+   "estim": false,
+   "p": 0.762,
+   "res": null
+  },
+  {
+   "date": "2026-11-22",
+   "ticket": "solide",
+   "eid": "401910033",
+   "aid": "4873138",
+   "nom": "Ace Bailey",
+   "eq": "UTAH",
+   "m": "reb",
+   "k": 5,
+   "cote": 1.61,
+   "estim": false,
+   "p": 0.651,
+   "res": null
+  },
+  {
+   "date": "2026-11-22",
+   "ticket": "solide",
+   "eid": "401910032",
+   "aid": "3936299",
+   "nom": "Jamal Murray",
+   "eq": "DEN",
+   "m": "reb",
+   "k": 4,
+   "cote": 1.5,
+   "estim": false,
+   "p": 0.682,
+   "res": null
   }
  ],
  "tickets": [
@@ -109,7 +193,8 @@
      "cote": 2.27,
      "estim": true,
      "p": 0.434,
-     "res": null
+     "res": "gagne",
+     "val": 26
     }
    ],
    "res": "perdu"
@@ -151,6 +236,120 @@
     }
    ],
    "res": "perdu"
+  },
+  {
+   "date": "2026-11-22",
+   "type": "fun",
+   "cote": 19.53,
+   "legs": [
+    {
+     "date": "2026-11-22",
+     "ticket": "fun",
+     "eid": "401910032",
+     "aid": "4711294",
+     "nom": "Matas Buzelis",
+     "eq": "CHI",
+     "m": "ast",
+     "k": 2,
+     "cote": 1.71,
+     "estim": false,
+     "p": 0.612,
+     "res": null
+    },
+    {
+     "date": "2026-11-22",
+     "ticket": "fun",
+     "eid": "401910031",
+     "aid": "4566434",
+     "nom": "Franz Wagner",
+     "eq": "ORL",
+     "m": "ast",
+     "k": 8,
+     "cote": 2.11,
+     "estim": false,
+     "p": 0.52,
+     "res": null
+    },
+    {
+     "date": "2026-11-22",
+     "ticket": "fun",
+     "eid": "401910033",
+     "aid": "4433627",
+     "nom": "Keyonte George",
+     "eq": "UTAH",
+     "m": "reb",
+     "k": 4,
+     "cote": 1.83,
+     "estim": false,
+     "p": 0.563,
+     "res": null
+    },
+    {
+     "date": "2026-11-22",
+     "ticket": "fun",
+     "eid": "401910034",
+     "aid": "3934672",
+     "nom": "Jalen Brunson",
+     "eq": "NY",
+     "m": "tpm",
+     "k": 3,
+     "cote": 1.74,
+     "estim": false,
+     "p": 0.675,
+     "res": null
+    },
+    {
+     "date": "2026-11-22",
+     "ticket": "fun",
+     "eid": "401910035",
+     "aid": "5175737",
+     "nom": "Yaxel Lendeborg",
+     "eq": "GS",
+     "m": "reb",
+     "k": 7,
+     "cote": 1.7,
+     "estim": false,
+     "p": 0.569,
+     "res": null
+    }
+   ],
+   "res": null
+  },
+  {
+   "date": "2026-11-22",
+   "type": "safe",
+   "cote": 1.48,
+   "legs": [
+    {
+     "date": "2026-11-22",
+     "ticket": "safe",
+     "eid": "401910030",
+     "aid": "4278053",
+     "nom": "Davion Mitchell",
+     "eq": "MIA",
+     "m": "pts",
+     "k": 10,
+     "cote": 1.23,
+     "estim": false,
+     "p": 0.878,
+     "res": null
+    },
+    {
+     "date": "2026-11-22",
+     "ticket": "safe",
+     "eid": "401910031",
+     "aid": "4712849",
+     "nom": "Anthony Black",
+     "eq": "ORL",
+     "m": "pra",
+     "k": 20,
+     "cote": 1.2,
+     "estim": false,
+     "p": 0.842,
+     "res": null
+    }
+   ],
+   "res": null
   }
  ]
 }
