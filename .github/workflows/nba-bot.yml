@@ -25,11 +25,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
 
       - name: Installer les dependances
         run: |
           python -m pip install -r requirements.txt
-          sudo apt-get install -y -qq poppler-utils >/dev/null 2>&1 || echo "poppler absent"
+          sudo apt-get install -y -qq poppler-utils
+          command -v pdftotext || { echo "ERREUR : pdftotext manquant"; exit 1; }
 
       - name: Lancer le bot NBA
         env:
@@ -40,16 +42,15 @@ jobs:
       - name: Verifier les picks du soir
         run: |
           python - <<'PY'
-          import json, sys
-          try:
-              with open("historique_nba.json", encoding="utf-8") as f:
-                  picks = json.load(f)["picks"]
-          except Exception as e:
-              sys.exit("historique_nba.json illisible : %s" % e)
-          en_attente = [p for p in picks if p.get("res") is None]
-          if not en_attente:
-              sys.exit("ALERTE : aucun pick produit ce soir (bot silencieux ou donnees vides).")
-          print("OK : %d pick(s) produit(s) ce soir." % len(en_attente))
+          import json, sys, datetime
+          with open("historique_nba.json", encoding="utf-8") as f:
+              picks = json.load(f)["picks"]
+          seuil = (datetime.datetime.utcnow().date() - datetime.timedelta(days=1)).isoformat()
+          recents = [p for p in picks if p.get("date", "") >= seuil]
+          if not recents:
+              print("ALERTE : aucun pick produit récemment.")
+              sys.exit(1)
+          print("OK : %d pick(s) récent(s) trouvé(s)." % len(recents))
           PY
 
       - name: Sauvegarder historique
@@ -57,7 +58,18 @@ jobs:
         run: |
           git config user.name "bot-nba"
           git config user.email "bot-nba@users.noreply.github.com"
-          git add -A historique_nba.json data_nba/ 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "Suivi NBA $(date +%F)"
           git pull --rebase --autostash || true
-          git push || true
+          git add historique_nba.json data_nba/ 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "Suivi NBA $(date +%F)"
+          git push
+
+      - name: Alerte Telegram en cas d'echec
+        if: failure()
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || secrets.CHAT_ID }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
+            -d text="❌ Bot NBA en échec ce soir. Va voir les logs sur GitHub Actions." \
+            || true
