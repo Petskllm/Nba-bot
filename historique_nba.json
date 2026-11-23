@@ -72,7 +72,8 @@
    "cote": 1.42,
    "estim": false,
    "p": 0.802,
-   "res": null
+   "res": "gagne",
+   "val": 14
   },
   {
    "date": "2026-11-22",
@@ -86,7 +87,8 @@
    "cote": 1.63,
    "estim": false,
    "p": 0.718,
-   "res": null
+   "res": "perdu",
+   "val": 2
   },
   {
    "date": "2026-11-22",
@@ -100,7 +102,8 @@
    "cote": 1.74,
    "estim": false,
    "p": 0.675,
-   "res": null
+   "res": "perdu",
+   "val": 1
   },
   {
    "date": "2026-11-22",
@@ -114,7 +117,8 @@
    "cote": 1.43,
    "estim": false,
    "p": 0.762,
-   "res": null
+   "res": "gagne",
+   "val": 3
   },
   {
    "date": "2026-11-22",
@@ -128,7 +132,8 @@
    "cote": 1.61,
    "estim": false,
    "p": 0.651,
-   "res": null
+   "res": "gagne",
+   "val": 5
   },
   {
    "date": "2026-11-22",
@@ -142,7 +147,8 @@
    "cote": 1.5,
    "estim": false,
    "p": 0.682,
-   "res": null
+   "res": "gagne",
+   "val": 5
   },
   {
    "date": "2026-11-21",
@@ -239,6 +245,90 @@
    "res": "gagne",
    "reconstitue": true,
    "val": 6
+  },
+  {
+   "date": "2026-11-23",
+   "ticket": "solide",
+   "eid": "401910037",
+   "aid": "5124612",
+   "nom": "VJ Edgecombe",
+   "eq": "PHI",
+   "m": "pts",
+   "k": 10,
+   "cote": 1.48,
+   "estim": false,
+   "p": 0.782,
+   "res": null
+  },
+  {
+   "date": "2026-11-23",
+   "ticket": "solide",
+   "eid": "401910037",
+   "aid": "5081727",
+   "nom": "Sidy Cissoko",
+   "eq": "POR",
+   "m": "pra",
+   "k": 11,
+   "cote": 1.76,
+   "estim": false,
+   "p": 0.67,
+   "res": null
+  },
+  {
+   "date": "2026-11-23",
+   "ticket": "solide",
+   "eid": "401910043",
+   "aid": "3448",
+   "nom": "Brook Lopez",
+   "eq": "LAC",
+   "m": "pts",
+   "k": 12,
+   "cote": 1.78,
+   "estim": false,
+   "p": 0.663,
+   "res": null
+  },
+  {
+   "date": "2026-11-23",
+   "ticket": "solide",
+   "eid": "401910036",
+   "aid": "4433083",
+   "nom": "Cam Spencer",
+   "eq": "MEM",
+   "m": "pts",
+   "k": 8,
+   "cote": 1.42,
+   "estim": false,
+   "p": 0.778,
+   "res": null
+  },
+  {
+   "date": "2026-11-23",
+   "ticket": "solide",
+   "eid": "401910041",
+   "aid": "5023693",
+   "nom": "Tyrese Proctor",
+   "eq": "CLE",
+   "m": "pts",
+   "k": 6,
+   "cote": 1.3,
+   "estim": false,
+   "p": 0.812,
+   "res": null
+  },
+  {
+   "date": "2026-11-23",
+   "ticket": "solide",
+   "eid": "401910038",
+   "aid": "4683778",
+   "nom": "Jared McCain",
+   "eq": "OKC",
+   "m": "pra",
+   "k": 21,
+   "cote": 1.88,
+   "estim": false,
+   "p": 0.626,
+   "res": null
   }
  ],
  "tickets": [
@@ -350,7 +440,8 @@
      "cote": 1.71,
      "estim": false,
      "p": 0.612,
-     "res": null
+     "res": "gagne",
+     "val": 3
     },
     {
      "date": "2026-11-22",
@@ -364,7 +455,8 @@
      "cote": 2.11,
      "estim": false,
      "p": 0.52,
-     "res": null
+     "res": "perdu",
+     "val": 6
     },
     {
      "date": "2026-11-22",
@@ -378,7 +470,8 @@
      "cote": 1.83,
      "estim": false,
      "p": 0.563,
-     "res": null
+     "res": "gagne",
+     "val": 5
     },
     {
      "date": "2026-11-22",
@@ -392,7 +485,8 @@
      "cote": 1.74,
      "estim": false,
      "p": 0.675,
-     "res": null
+     "res": "perdu",
+     "val": 1
     },
     {
      "date": "2026-11-22",
@@ -406,10 +500,11 @@
      "cote": 1.7,
      "estim": false,
      "p": 0.569,
-     "res": null
+     "res": "gagne",
+     "val": 8
     }
    ],
-   "res": null
+   "res": "perdu"
   },
   {
    "date": "2026-11-22",
@@ -428,7 +523,8 @@
      "cote": 1.23,
      "estim": false,
      "p": 0.878,
-     "res": null
+     "res": "gagne",
+     "val": 14
     },
     {
      "date": "2026-11-22",
@@ -442,10 +538,12 @@
      "cote": 1.2,
      "estim": false,
      "p": 0.842,
-     "res": null
+     "res": "gagne",
+     "val": 21
     }
    ],
-   "res": null
+   "res": "gagne",
+   "cote_reelle": 1.48
   },
   {
    "date": "2026-11-21",
@@ -576,6 +674,120 @@
    ],
    "res": "perdu",
    "reconstitue": true
+  },
+  {
+   "date": "2026-11-23",
+   "type": "fun",
+   "cote": 30.98,
+   "legs": [
+    {
+     "date": "2026-11-23",
+     "ticket": "fun",
+     "eid": "401910037",
+     "aid": "4431736",
+     "nom": "Toumani Camara",
+     "eq": "POR",
+     "m": "pts",
+     "k": 10,
+     "cote": 1.66,
+     "estim": false,
+     "p": 0.644,
+     "res": null
+    },
+    {
+     "date": "2026-11-23",
+     "ticket": "fun",
+     "eid": "401910036",
+     "aid": "4903027",
+     "nom": "Cedric Coward",
+     "eq": "MEM",
+     "m": "pra",
+     "k": 27,
+     "cote": 1.81,
+     "estim": false,
+     "p": 0.607,
+     "res": null
+    },
+    {
+     "date": "2026-11-23",
+     "ticket": "fun",
+     "eid": "401910042",
+     "aid": "4397136",
+     "nom": "Saddiq Bey",
+     "eq": "NO",
+     "m": "ast",
+     "k": 3,
+     "cote": 2.42,
+     "estim": false,
+     "p": 0.538,
+     "res": null
+    },
+    {
+     "date": "2026-11-23",
+     "ticket": "fun",
+     "eid": "401910041",
+     "aid": "5023693",
+     "nom": "Tyrese Proctor",
+     "eq": "CLE",
+     "m": "tpm",
+     "k": 2,
+     "cote": 2.12,
+     "estim": false,
+     "p": 0.591,
+     "res": null
+    },
+    {
+     "date": "2026-11-23",
+     "ticket": "fun",
+     "eid": "401910044",
+     "aid": "4592691",
+     "nom": "Jake LaRavia",
+     "eq": "LAL",
+     "m": "ast",
+     "k": 2,
+     "cote": 2.01,
+     "estim": false,
+     "p": 0.594,
+     "res": null
+    }
+   ],
+   "res": null
+  },
+  {
+   "date": "2026-11-23",
+   "type": "safe",
+   "cote": 1.53,
+   "legs": [
+    {
+     "date": "2026-11-23",
+     "ticket": "safe",
+     "eid": "401910037",
+     "aid": "5124612",
+     "nom": "VJ Edgecombe",
+     "eq": "PHI",
+     "m": "pts",
+     "k": 8,
+     "cote": 1.24,
+     "estim": false,
+     "p": 0.872,
+     "res": null
+    },
+    {
+     "date": "2026-11-23",
+     "ticket": "safe",
+     "eid": "401910043",
+     "aid": "3448",
+     "nom": "Brook Lopez",
+     "eq": "LAC",
+     "m": "pts",
+     "k": 8,
+     "cote": 1.23,
+     "estim": false,
+     "p": 0.841,
+     "res": null
+    }
+   ],
+   "res": null
   }
  ]
 }
