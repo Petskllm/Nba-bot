@@ -30,3 +30,27 @@ Bot qui construit chaque soir des pronos de props joueurs NBA (points, rebonds, 
 pip install -r requirements.txt
 export TELEGRAM_TOKEN=... TELEGRAM_CHAT_ID=...
 python Nba_bot.py
+```
+
+## Mesurer les performances
+
+```bash
+python backtest.py                     # bilan global + par ticket + par marché
+python backtest.py --min 30            # minimum de picks tranchés par groupe analysé
+python backtest.py --json              # sortie JSON (pour un suivi automatisé)
+```
+
+Le backtest lit `historique_nba.json` et calcule, par ticket et par marché :
+hit-rate réel, proba moyenne annoncée (dérive de calibration), ROI à mise fixe et Brier score.
+
+## Roadmap
+
+- Modèle de **minutes projetées** (titulaire, retours de coéquipiers) au lieu des minutes moyennes L5
+- Défense adverse par poste précis plutôt que par groupe G/F/C
+- Rotation de l'historique (90 jours glissants) pour éviter l'inflation du dépôt
+- Backtest hebdomadaire automatique en Actions
+
+## Avertissement
+
+Outil d'aide à la décision à but statistique et personnel. Les paris comportent des risques :
+jouez de manière responsable, jamais plus que ce que vous pouvez vous permettre de perdre.
