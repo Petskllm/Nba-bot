@@ -28,7 +28,7 @@ jobs:
 
       - name: Installer les dependances
         run: |
-          python -m pip install requests pypdf
+          python -m pip install -r requirements.txt
           sudo apt-get install -y -qq poppler-utils >/dev/null 2>&1 || echo "poppler absent"
 
       - name: Lancer le bot NBA
@@ -36,6 +36,21 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || secrets.CHAT_ID }}
         run: python -u Nba_bot.py
+
+      - name: Verifier les picks du soir
+        run: |
+          python - <<'PY'
+          import json, sys
+          try:
+              with open("historique_nba.json", encoding="utf-8") as f:
+                  picks = json.load(f)["picks"]
+          except Exception as e:
+              sys.exit("historique_nba.json illisible : %s" % e)
+          en_attente = [p for p in picks if p.get("res") is None]
+          if not en_attente:
+              sys.exit("ALERTE : aucun pick produit ce soir (bot silencieux ou donnees vides).")
+          print("OK : %d pick(s) produit(s) ce soir." % len(en_attente))
+          PY
 
       - name: Sauvegarder historique
         if: always()
