@@ -48,7 +48,7 @@ hit-rate réel, proba moyenne annoncée (dérive de calibration), ROI à mise fi
 - Modèle de **minutes projetées** (titulaire, retours de coéquipiers) au lieu des minutes moyennes L5
 - Défense adverse par poste précis plutôt que par groupe G/F/C
 - Rotation de l'historique (90 jours glissants) pour éviter l'inflation du dépôt
-- Backtest hebdomadaire automatique en Actions
+- Backtest hebdomadaire automatique en Actions (`nba-backtest.yml`), disponible comme artefact pendant 30 jours
 
 ## Avertissement
 

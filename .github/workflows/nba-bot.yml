@@ -29,8 +29,7 @@ jobs:
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install requests pypdf
+          pip install -r requirements.txt
           sudo apt-get install -y -qq poppler-utils
           command -v pdftotext || { echo "ERREUR : pdftotext manquant"; exit 1; }
 

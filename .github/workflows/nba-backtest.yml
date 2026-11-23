@@ -1,0 +1,39 @@
+name: Backtest NBA
+
+on:
+  schedule:
+    # Chaque dimanche à 23:30 UTC
+    - cron: "30 23 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer les dependances
+        run: python -m pip install -r requirements.txt
+
+      - name: Verifier la syntaxe
+        run: python -m py_compile Nba_bot.py backtest.py
+
+      - name: Executer le backtest
+        run: python backtest.py --min 1 --json > nba-backtest.json
+
+      - name: Publier le rapport
+        uses: actions/upload-artifact@v4
+        with:
+          name: nba-backtest-${{ github.run_number }}
+          path: nba-backtest.json
+          retention-days: 30
