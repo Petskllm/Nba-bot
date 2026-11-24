@@ -29,7 +29,9 @@ def bilan(picks):
         return None
     hits = sum(1 for p in picks if p["res"] == "gagne")
     mise = float(n)
-    rendement = sum((p["cote"] - 1) for p in picks if p["res"] == "gagne")
+    profit_gains = sum((p["cote"] - 1) for p in picks if p["res"] == "gagne")
+    mises_perdues = sum(1 for p in picks if p["res"] == "perdu")
+    profit = profit_gains - mises_perdues
     brier = sum((1 - p["p"]) ** 2 for p in picks if p["res"] == "gagne") \
         + sum(p["p"] ** 2 for p in picks if p["res"] == "perdu")
     return {
@@ -38,8 +40,8 @@ def bilan(picks):
         "hit_rate": hits / n,
         "proba_annoncee": sum(p["p"] for p in picks) / n,
         "brier": brier / n,
-        "roi": (rendement - mise) / mise,
-        "profit": rendement - mise,
+        "roi": profit / mise,
+        "profit": profit,
     }
 
 
