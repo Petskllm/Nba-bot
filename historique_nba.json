@@ -258,7 +258,8 @@
    "cote": 1.95,
    "estim": false,
    "p": 0.64,
-   "res": null
+   "res": "gagne",
+   "val": 30
   },
   {
    "date": "2026-11-23",
@@ -272,7 +273,8 @@
    "cote": 1.53,
    "estim": false,
    "p": 0.749,
-   "res": null
+   "res": "gagne",
+   "val": 26
   },
   {
    "date": "2026-11-23",
@@ -286,7 +288,8 @@
    "cote": 1.78,
    "estim": false,
    "p": 0.662,
-   "res": null
+   "res": "perdu",
+   "val": 3
   },
   {
    "date": "2026-11-23",
@@ -300,7 +303,8 @@
    "cote": 1.84,
    "estim": false,
    "p": 0.632,
-   "res": null
+   "res": "perdu",
+   "val": 9
   },
   {
    "date": "2026-11-23",
@@ -314,7 +318,8 @@
    "cote": 1.52,
    "estim": false,
    "p": 0.714,
-   "res": null
+   "res": "perdu",
+   "val": 3
   },
   {
    "date": "2026-11-23",
@@ -328,7 +333,8 @@
    "cote": 1.47,
    "estim": false,
    "p": 0.73,
-   "res": null
+   "res": "gagne",
+   "val": 26
   }
  ],
  "tickets": [
@@ -692,7 +698,8 @@
      "cote": 1.89,
      "estim": false,
      "p": 0.568,
-     "res": null
+     "res": "perdu",
+     "val": 13
     },
     {
      "date": "2026-11-23",
@@ -706,7 +713,8 @@
      "cote": 1.87,
      "estim": false,
      "p": 0.541,
-     "res": null
+     "res": "gagne",
+     "val": 23
     },
     {
      "date": "2026-11-23",
@@ -720,7 +728,8 @@
      "cote": 1.86,
      "estim": false,
      "p": 0.536,
-     "res": null
+     "res": "perdu",
+     "val": 2
     },
     {
      "date": "2026-11-23",
@@ -734,7 +743,8 @@
      "cote": 2.24,
      "estim": false,
      "p": 0.549,
-     "res": null
+     "res": "gagne",
+     "val": 3
     },
     {
      "date": "2026-11-23",
@@ -748,10 +758,11 @@
      "cote": 2.08,
      "estim": false,
      "p": 0.594,
-     "res": null
+     "res": "perdu",
+     "val": 0
     }
    ],
-   "res": null
+   "res": "perdu"
   },
   {
    "date": "2026-11-23",
@@ -770,7 +781,8 @@
      "cote": 1.23,
      "estim": false,
      "p": 0.841,
-     "res": null
+     "res": "perdu",
+     "val": 3
     },
     {
      "date": "2026-11-23",
@@ -784,10 +796,11 @@
      "cote": 1.2,
      "estim": false,
      "p": 0.835,
-     "res": null
+     "res": "gagne",
+     "val": 28
     }
    ],
-   "res": null
+   "res": "perdu"
   }
  ]
 }
