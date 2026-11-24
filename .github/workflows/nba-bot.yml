@@ -1,8 +1,6 @@
 name: Bot NBA props
 
 on:
-  schedule:
-    - cron: "0 22 * * *"
   workflow_dispatch:
 
 permissions:
