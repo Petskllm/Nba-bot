@@ -335,6 +335,90 @@
    "p": 0.73,
    "res": "gagne",
    "val": 26
+  },
+  {
+   "date": "2026-11-24",
+   "ticket": "solide",
+   "eid": "401909314",
+   "aid": "4066320",
+   "nom": "Desmond Bane",
+   "eq": "ORL",
+   "m": "tpm",
+   "k": 3,
+   "cote": 1.5,
+   "estim": false,
+   "p": 0.74,
+   "res": null
+  },
+  {
+   "date": "2026-11-24",
+   "ticket": "solide",
+   "eid": "401909316",
+   "aid": "3112335",
+   "nom": "Nikola Jokic",
+   "eq": "DEN",
+   "m": "pts",
+   "k": 25,
+   "cote": 1.76,
+   "estim": false,
+   "p": 0.654,
+   "res": null
+  },
+  {
+   "date": "2026-11-24",
+   "ticket": "solide",
+   "eid": "401909314",
+   "aid": "4566434",
+   "nom": "Franz Wagner",
+   "eq": "ORL",
+   "m": "ast",
+   "k": 6,
+   "cote": 1.49,
+   "estim": false,
+   "p": 0.728,
+   "res": null
+  },
+  {
+   "date": "2026-11-24",
+   "ticket": "solide",
+   "eid": "401909315",
+   "aid": "5142718",
+   "nom": "AJ Dybantsa",
+   "eq": "WSH",
+   "m": "reb",
+   "k": 5,
+   "cote": 1.32,
+   "estim": false,
+   "p": 0.789,
+   "res": null
+  },
+  {
+   "date": "2026-11-24",
+   "ticket": "solide",
+   "eid": "401909316",
+   "aid": "3936299",
+   "nom": "Jamal Murray",
+   "eq": "DEN",
+   "m": "pra",
+   "k": 30,
+   "cote": 1.35,
+   "estim": false,
+   "p": 0.774,
+   "res": null
+  },
+  {
+   "date": "2026-11-24",
+   "ticket": "solide",
+   "eid": "401909315",
+   "aid": "5174563",
+   "nom": "Kyshawn George",
+   "eq": "WSH",
+   "m": "pts",
+   "k": 12,
+   "cote": 1.44,
+   "estim": false,
+   "p": 0.735,
+   "res": null
   }
  ],
  "tickets": [
@@ -801,6 +885,92 @@
     }
    ],
    "res": "perdu"
+  },
+  {
+   "date": "2026-11-24",
+   "type": "fun",
+   "cote": 7.55,
+   "legs": [
+    {
+     "date": "2026-11-24",
+     "ticket": "fun",
+     "eid": "401909314",
+     "aid": "4712849",
+     "nom": "Anthony Black",
+     "eq": "ORL",
+     "m": "tpm",
+     "k": 2,
+     "cote": 2.07,
+     "estim": false,
+     "p": 0.536,
+     "res": null
+    },
+    {
+     "date": "2026-11-24",
+     "ticket": "fun",
+     "eid": "401909315",
+     "aid": "6583",
+     "nom": "Anthony Davis",
+     "eq": "WSH",
+     "m": "pts",
+     "k": 21,
+     "cote": 1.94,
+     "estim": false,
+     "p": 0.575,
+     "res": null
+    },
+    {
+     "date": "2026-11-24",
+     "ticket": "fun",
+     "eid": "401909316",
+     "aid": "4431767",
+     "nom": "Christian Braun",
+     "eq": "DEN",
+     "m": "ast",
+     "k": 3,
+     "cote": 1.88,
+     "estim": false,
+     "p": 0.566,
+     "res": null
+    }
+   ],
+   "res": null
+  },
+  {
+   "date": "2026-11-24",
+   "type": "safe",
+   "cote": 1.51,
+   "legs": [
+    {
+     "date": "2026-11-24",
+     "ticket": "safe",
+     "eid": "401909314",
+     "aid": "4566434",
+     "nom": "Franz Wagner",
+     "eq": "ORL",
+     "m": "pra",
+     "k": 30,
+     "cote": 1.21,
+     "estim": false,
+     "p": 0.853,
+     "res": null
+    },
+    {
+     "date": "2026-11-24",
+     "ticket": "safe",
+     "eid": "401909315",
+     "aid": "5174563",
+     "nom": "Kyshawn George",
+     "eq": "WSH",
+     "m": "pts",
+     "k": 10,
+     "cote": 1.25,
+     "estim": false,
+     "p": 0.84,
+     "res": null
+    }
+   ],
+   "res": null
   }
  ]
 }
