@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-BOT NBA · PROPS JOUEURS · v1.2
+BOT NBA · PROPS JOUEURS · v1.3
 Marchés : points, rebonds, passes, PRA (points+rebonds+passes), paniers à 3 points.
 Tickets : pronos solides, combiné fun (grosse cote), ticket safe + texte prêt pour X.
 v1.1 : filtre minutes stables, titulaires, retours de blessure (bilan 20-21 nov).
 v1.2 : le combiné fun vise une cote 30+ avec des jambes confirmées (rôle / minutes / forme).
        Si 30 n'est pas atteignable proprement, on publie le meilleur ticket solide, sans pile-ou-face.
+v1.3 : postes précis, minutes projetées et fallback spread lorsque DraftKings ne publie pas de ligne.
 
 100 % gratuit, aucune clé API :
   - ESPN (JSON public) : calendrier, box scores, spreads/totaux, blessures, et les vraies
@@ -255,7 +256,7 @@ def compacter_resume(gid, d):
                 fgm, fga = paire(v("fieldGoalsMade-fieldGoalsAttempted"))
                 tpm, tpa = paire(v("threePointFieldGoalsMade-threePointFieldGoalsAttempted"))
                 ftm, fta = paire(v("freeThrowsMade-freeThrowsAttempted"))
-                rec["p"].append([aid, tid, pos_groupe(pos), mins, int(num(v("points"))),
+                rec["p"].append([aid, tid, (pos or "F").upper(), mins, int(num(v("points"))),
                                  int(num(v("rebounds"))), int(num(v("assists"))), tpm, fga, fta,
                                  int(num(v("turnovers"))), 1 if a.get("starter") else 0])
         return rec, noms
@@ -383,7 +384,7 @@ def facteur_defense(idx, adv, pos, m):
     taux_lg = lg[col] / lg[0]
     if taux_lg <= 0:
         return 1.0
-    k_min = 600.0                         # ~ 6 matchs de minutes "moyennes" ajoutées
+    k_min = 900.0                         # lissage renforcé : buckets plus fins (PG/SG/SF/PF/C)
     taux = (d[col] + k_min * taux_lg) / (d[0] + k_min)
     f = 1 + 0.6 * (taux / taux_lg - 1)
     return min(max(f, BORNES_DEF[0]), BORNES_DEF[1])
@@ -422,6 +423,24 @@ def proba_au_moins(k, moy, disp):
 
 def moyenne(l):
     return sum(l) / len(l) if l else 0.0
+
+
+def pseudo_spread(idx, match):
+    """Spread approximatif quand DK ne propose pas de ligne : différentiel récent (10 matchs)."""
+    def diff(tid):
+        ms = idx["equipes"].get(tid, [])[-10:]
+        dif = []
+        for x in ms:
+            g = idx["cache"]["games"].get(x["gid"])
+            if not g or x["tid"] not in g["sc"]:
+                continue
+            me = g["sc"][x["tid"]]
+            adv = g["sc"].get(g["a"] if x["tid"] == g["h"] else g["h"])
+            if adv is not None:
+                dif.append(me - adv)
+        return sum(dif) / len(dif) if dif else 0.0
+    d = diff(match["dom"]["id"]) - diff(match["ext"]["id"]) + 2.5   # +2.5 : avantage domicile
+    return d
 
 
 # ---------------------------------------------------------------- BLESSURES
@@ -824,8 +843,15 @@ def projeter(idx, prof, m, match, cote_dom, ctx):
     # minutes
     mp = 0.45 * prof["min_5"] + 0.30 * prof["min_10"] + 0.25 * prof["min_s"]
     tid = prof["tid"]
-    adv = match["ext"]["id"] if cote_dom else match["dom"]["id"]
     notes = []
+    # v1.3 — minutes projetées, pas seulement subies :
+    # le rôle compte (titulaire) et les absents importants du soir redistribuent des minutes
+    mp *= 1.04 if prof["titulaire"] else 0.96
+    n_abs = len(ctx["absents"].get(tid, []))
+    if n_abs:
+        mp *= 1 + min(0.09, 0.03 * n_abs)
+        notes.append("minutes boostées (absents)")
+    adv = match["ext"]["id"] if cote_dom else match["dom"]["id"]
     if ctx["b2b"].get(tid):
         mp *= B2B_MINUTES
         notes.append("back-to-back")
@@ -913,6 +939,12 @@ def candidats(idx, matchs, props, statuts, commentaires=None):
         for cote_eq in ("dom", "ext"):
             tid = mt[cote_eq]["id"]
             ctx["b2b"][tid] = a_joue_la_veille(idx, tid, mt["jour_et"])
+        if mt.get("spread") is None:
+            # v1.3 : pas de ligne DK -> spread estimé par le différentiel récent
+            sp = pseudo_spread(idx, mt)
+            mt["spread"] = round(abs(sp), 1)
+            mt["fav"] = mt["dom"]["abr"] if sp >= 0 else mt["ext"]["abr"]
+            print(f"Ligne estimée (différentiel récent) : {mt['ext']['abr']}@{mt['dom']['abr']} -> {mt['fav']} -{mt['spread']}")
     # profils + statut de tous les joueurs récents des équipes du soir
     tids = {mt[c]["id"] for mt in matchs for c in ("dom", "ext")}
     effectif = {t: {} for t in tids}
