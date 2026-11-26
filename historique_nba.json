@@ -348,7 +348,8 @@
    "cote": 1.5,
    "estim": false,
    "p": 0.74,
-   "res": null
+   "res": "gagne",
+   "val": 4
   },
   {
    "date": "2026-11-24",
@@ -362,7 +363,8 @@
    "cote": 1.76,
    "estim": false,
    "p": 0.654,
-   "res": null
+   "res": "perdu",
+   "val": 18
   },
   {
    "date": "2026-11-24",
@@ -376,7 +378,8 @@
    "cote": 1.49,
    "estim": false,
    "p": 0.728,
-   "res": null
+   "res": "gagne",
+   "val": 6
   },
   {
    "date": "2026-11-24",
@@ -390,7 +393,8 @@
    "cote": 1.32,
    "estim": false,
    "p": 0.789,
-   "res": null
+   "res": "gagne",
+   "val": 11
   },
   {
    "date": "2026-11-24",
@@ -404,7 +408,8 @@
    "cote": 1.35,
    "estim": false,
    "p": 0.774,
-   "res": null
+   "res": "perdu",
+   "val": 25
   },
   {
    "date": "2026-11-24",
@@ -418,6 +423,91 @@
    "cote": 1.44,
    "estim": false,
    "p": 0.735,
+   "res": "gagne",
+   "val": 24
+  },
+  {
+   "date": "2026-11-25",
+   "ticket": "solide",
+   "eid": "401909321",
+   "aid": "4433083",
+   "nom": "Cam Spencer",
+   "eq": "MEM",
+   "m": "pra",
+   "k": 15,
+   "cote": 1.4,
+   "estim": false,
+   "p": 0.799,
+   "res": null
+  },
+  {
+   "date": "2026-11-25",
+   "ticket": "solide",
+   "eid": "401909321",
+   "aid": "3936099",
+   "nom": "Derrick Jones Jr.",
+   "eq": "LAC",
+   "m": "pra",
+   "k": 10,
+   "cote": 1.37,
+   "estim": false,
+   "p": 0.792,
+   "res": null
+  },
+  {
+   "date": "2026-11-25",
+   "ticket": "solide",
+   "eid": "401909325",
+   "aid": "5081727",
+   "nom": "Sidy Cissoko",
+   "eq": "POR",
+   "m": "tpm",
+   "k": 1,
+   "cote": 1.39,
+   "estim": false,
+   "p": 0.763,
+   "res": null
+  },
+  {
+   "date": "2026-11-25",
+   "ticket": "solide",
+   "eid": "401909322",
+   "aid": "3064514",
+   "nom": "Julius Randle",
+   "eq": "BKN",
+   "m": "pts",
+   "k": 18,
+   "cote": 1.33,
+   "estim": false,
+   "p": 0.778,
+   "res": null
+  },
+  {
+   "date": "2026-11-25",
+   "ticket": "solide",
+   "eid": "401909323",
+   "aid": "4066383",
+   "nom": "Miles Bridges",
+   "eq": "PHX",
+   "m": "reb",
+   "k": 5,
+   "cote": 1.31,
+   "estim": false,
+   "p": 0.78,
+   "res": null
+  },
+  {
+   "date": "2026-11-25",
+   "ticket": "solide",
+   "eid": "401909323",
+   "aid": "3202",
+   "nom": "Kevin Durant",
+   "eq": "HOU",
+   "m": "ast",
+   "k": 3,
+   "cote": 1.35,
+   "estim": false,
+   "p": 0.76,
    "res": null
   }
  ],
@@ -903,7 +993,8 @@
      "cote": 2.07,
      "estim": false,
      "p": 0.536,
-     "res": null
+     "res": "perdu",
+     "val": 0
     },
     {
      "date": "2026-11-24",
@@ -917,7 +1008,8 @@
      "cote": 1.94,
      "estim": false,
      "p": 0.575,
-     "res": null
+     "res": "gagne",
+     "val": 33
     },
     {
      "date": "2026-11-24",
@@ -931,10 +1023,11 @@
      "cote": 1.88,
      "estim": false,
      "p": 0.566,
-     "res": null
+     "res": "gagne",
+     "val": 4
     }
    ],
-   "res": null
+   "res": "perdu"
   },
   {
    "date": "2026-11-24",
@@ -953,7 +1046,8 @@
      "cote": 1.21,
      "estim": false,
      "p": 0.853,
-     "res": null
+     "res": "gagne",
+     "val": 35
     },
     {
      "date": "2026-11-24",
@@ -967,6 +1061,122 @@
      "cote": 1.25,
      "estim": false,
      "p": 0.84,
+     "res": "gagne",
+     "val": 24
+    }
+   ],
+   "res": "gagne",
+   "cote_reelle": 1.51
+  },
+  {
+   "date": "2026-11-25",
+   "type": "fun",
+   "cote": 24.02,
+   "legs": [
+    {
+     "date": "2026-11-25",
+     "ticket": "fun",
+     "eid": "401909321",
+     "aid": "4396907",
+     "nom": "Darius Garland",
+     "eq": "LAC",
+     "m": "pts",
+     "k": 20,
+     "cote": 1.9,
+     "estim": false,
+     "p": 0.573,
+     "res": null
+    },
+    {
+     "date": "2026-11-25",
+     "ticket": "fun",
+     "eid": "401909322",
+     "aid": "5082206",
+     "nom": "Brayden Burries",
+     "eq": "MIL",
+     "m": "reb",
+     "k": 6,
+     "cote": 1.86,
+     "estim": false,
+     "p": 0.562,
+     "res": null
+    },
+    {
+     "date": "2026-11-25",
+     "ticket": "fun",
+     "eid": "401909323",
+     "aid": "4437244",
+     "nom": "Jalen Green",
+     "eq": "PHX",
+     "m": "reb",
+     "k": 4,
+     "cote": 2.03,
+     "estim": false,
+     "p": 0.504,
+     "res": null
+    },
+    {
+     "date": "2026-11-25",
+     "ticket": "fun",
+     "eid": "401909325",
+     "aid": "4592479",
+     "nom": "Julian Champagnie",
+     "eq": "SA",
+     "m": "tpm",
+     "k": 3,
+     "cote": 1.81,
+     "estim": false,
+     "p": 0.57,
+     "res": null
+    },
+    {
+     "date": "2026-11-25",
+     "ticket": "fun",
+     "eid": "401909324",
+     "aid": "4709138",
+     "nom": "Brandin Podziemski",
+     "eq": "GS",
+     "m": "tpm",
+     "k": 3,
+     "cote": 1.85,
+     "estim": false,
+     "p": 0.53,
+     "res": null
+    }
+   ],
+   "res": null
+  },
+  {
+   "date": "2026-11-25",
+   "type": "safe",
+   "cote": 1.45,
+   "legs": [
+    {
+     "date": "2026-11-25",
+     "ticket": "safe",
+     "eid": "401909321",
+     "aid": "4066648",
+     "nom": "Rui Hachimura",
+     "eq": "LAC",
+     "m": "pts",
+     "k": 8,
+     "cote": 1.21,
+     "estim": false,
+     "p": 0.842,
+     "res": null
+    },
+    {
+     "date": "2026-11-25",
+     "ticket": "safe",
+     "eid": "401909324",
+     "aid": "5142620",
+     "nom": "Darius Acuff Jr.",
+     "eq": "SAC",
+     "m": "pts",
+     "k": 18,
+     "cote": 1.2,
+     "estim": false,
+     "p": 0.824,
      "res": null
     }
    ],
