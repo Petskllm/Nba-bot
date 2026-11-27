@@ -438,7 +438,8 @@
    "cote": 1.4,
    "estim": false,
    "p": 0.799,
-   "res": null
+   "res": "gagne",
+   "val": 20
   },
   {
    "date": "2026-11-25",
@@ -452,7 +453,8 @@
    "cote": 1.37,
    "estim": false,
    "p": 0.792,
-   "res": null
+   "res": "perdu",
+   "val": 7
   },
   {
    "date": "2026-11-25",
@@ -466,7 +468,8 @@
    "cote": 1.39,
    "estim": false,
    "p": 0.763,
-   "res": null
+   "res": "gagne",
+   "val": 4
   },
   {
    "date": "2026-11-25",
@@ -480,7 +483,8 @@
    "cote": 1.33,
    "estim": false,
    "p": 0.778,
-   "res": null
+   "res": "gagne",
+   "val": 28
   },
   {
    "date": "2026-11-25",
@@ -494,7 +498,8 @@
    "cote": 1.31,
    "estim": false,
    "p": 0.78,
-   "res": null
+   "res": "gagne",
+   "val": 8
   },
   {
    "date": "2026-11-25",
@@ -508,6 +513,91 @@
    "cote": 1.35,
    "estim": false,
    "p": 0.76,
+   "res": "perdu",
+   "val": 2
+  },
+  {
+   "date": "2026-11-27",
+   "ticket": "solide",
+   "eid": "401909326",
+   "aid": "4278053",
+   "nom": "Davion Mitchell",
+   "eq": "MIA",
+   "m": "pts",
+   "k": 14,
+   "cote": 1.81,
+   "estim": false,
+   "p": 0.672,
+   "res": null
+  },
+  {
+   "date": "2026-11-27",
+   "ticket": "solide",
+   "eid": "401909331",
+   "aid": "4431671",
+   "nom": "Jaden McDaniels",
+   "eq": "MIN",
+   "m": "reb",
+   "k": 5,
+   "cote": 1.49,
+   "estim": false,
+   "p": 0.769,
+   "res": null
+  },
+  {
+   "date": "2026-11-27",
+   "ticket": "solide",
+   "eid": "401909328",
+   "aid": "5124612",
+   "nom": "VJ Edgecombe",
+   "eq": "PHI",
+   "m": "pts",
+   "k": 12,
+   "cote": 1.39,
+   "estim": false,
+   "p": 0.796,
+   "res": null
+  },
+  {
+   "date": "2026-11-27",
+   "ticket": "solide",
+   "eid": "401909333",
+   "aid": "4397014",
+   "nom": "Quentin Grimes",
+   "eq": "LAL",
+   "m": "pra",
+   "k": 15,
+   "cote": 1.68,
+   "estim": false,
+   "p": 0.681,
+   "res": null
+  },
+  {
+   "date": "2026-11-27",
+   "ticket": "solide",
+   "eid": "401909327",
+   "aid": "4684742",
+   "nom": "Ausar Thompson",
+   "eq": "DET",
+   "m": "reb",
+   "k": 7,
+   "cote": 1.32,
+   "estim": false,
+   "p": 0.798,
+   "res": null
+  },
+  {
+   "date": "2026-11-27",
+   "ticket": "solide",
+   "eid": "401909328",
+   "aid": "3149673",
+   "nom": "Pascal Siakam",
+   "eq": "IND",
+   "m": "pts",
+   "k": 20,
+   "cote": 1.4,
+   "estim": false,
+   "p": 0.765,
    "res": null
   }
  ],
@@ -1085,7 +1175,8 @@
      "cote": 1.9,
      "estim": false,
      "p": 0.573,
-     "res": null
+     "res": "perdu",
+     "val": 12
     },
     {
      "date": "2026-11-25",
@@ -1099,7 +1190,8 @@
      "cote": 1.86,
      "estim": false,
      "p": 0.562,
-     "res": null
+     "res": "perdu",
+     "val": 3
     },
     {
      "date": "2026-11-25",
@@ -1113,7 +1205,8 @@
      "cote": 2.03,
      "estim": false,
      "p": 0.504,
-     "res": null
+     "res": "gagne",
+     "val": 4
     },
     {
      "date": "2026-11-25",
@@ -1127,7 +1220,8 @@
      "cote": 1.81,
      "estim": false,
      "p": 0.57,
-     "res": null
+     "res": "perdu",
+     "val": 1
     },
     {
      "date": "2026-11-25",
@@ -1141,10 +1235,11 @@
      "cote": 1.85,
      "estim": false,
      "p": 0.53,
-     "res": null
+     "res": "gagne",
+     "val": 3
     }
    ],
-   "res": null
+   "res": "perdu"
   },
   {
    "date": "2026-11-25",
@@ -1163,7 +1258,8 @@
      "cote": 1.21,
      "estim": false,
      "p": 0.842,
-     "res": null
+     "res": "gagne",
+     "val": 14
     },
     {
      "date": "2026-11-25",
@@ -1177,6 +1273,136 @@
      "cote": 1.2,
      "estim": false,
      "p": 0.824,
+     "res": "gagne",
+     "val": 22
+    }
+   ],
+   "res": "gagne",
+   "cote_reelle": 1.45
+  },
+  {
+   "date": "2026-11-27",
+   "type": "fun",
+   "cote": 30.15,
+   "legs": [
+    {
+     "date": "2026-11-27",
+     "ticket": "fun",
+     "eid": "401909330",
+     "aid": "4431680",
+     "nom": "Onyeka Okongwu",
+     "eq": "ATL",
+     "m": "reb",
+     "k": 9,
+     "cote": 2.47,
+     "estim": false,
+     "p": 0.522,
+     "res": null
+    },
+    {
+     "date": "2026-11-27",
+     "ticket": "fun",
+     "eid": "401909333",
+     "aid": "4845367",
+     "nom": "Stephon Castle",
+     "eq": "SA",
+     "m": "tpm",
+     "k": 2,
+     "cote": 1.66,
+     "estim": false,
+     "p": 0.659,
+     "res": null
+    },
+    {
+     "date": "2026-11-27",
+     "ticket": "fun",
+     "eid": "401909336",
+     "aid": "5175737",
+     "nom": "Yaxel Lendeborg",
+     "eq": "GS",
+     "m": "reb",
+     "k": 8,
+     "cote": 2.28,
+     "estim": false,
+     "p": 0.526,
+     "res": null
+    },
+    {
+     "date": "2026-11-27",
+     "ticket": "fun",
+     "eid": "401909335",
+     "aid": "4396907",
+     "nom": "Darius Garland",
+     "eq": "LAC",
+     "m": "pts",
+     "k": 20,
+     "cote": 1.68,
+     "estim": false,
+     "p": 0.65,
+     "res": null
+    },
+    {
+     "date": "2026-11-27",
+     "ticket": "fun",
+     "eid": "401909334",
+     "aid": "4431767",
+     "nom": "Christian Braun",
+     "eq": "DEN",
+     "m": "pra",
+     "k": 20,
+     "cote": 1.92,
+     "estim": false,
+     "p": 0.564,
+     "res": null
+    }
+   ],
+   "res": null
+  },
+  {
+   "date": "2026-11-27",
+   "type": "safe",
+   "cote": 1.81,
+   "legs": [
+    {
+     "date": "2026-11-27",
+     "ticket": "safe",
+     "eid": "401909333",
+     "aid": "3945274",
+     "nom": "Luka Doncic",
+     "eq": "LAL",
+     "m": "pts",
+     "k": 25,
+     "cote": 1.2,
+     "estim": false,
+     "p": 0.874,
+     "res": null
+    },
+    {
+     "date": "2026-11-27",
+     "ticket": "safe",
+     "eid": "401909328",
+     "aid": "5124612",
+     "nom": "VJ Edgecombe",
+     "eq": "PHI",
+     "m": "pts",
+     "k": 10,
+     "cote": 1.2,
+     "estim": false,
+     "p": 0.873,
+     "res": null
+    },
+    {
+     "date": "2026-11-27",
+     "ticket": "safe",
+     "eid": "401909326",
+     "aid": "4278053",
+     "nom": "Davion Mitchell",
+     "eq": "MIA",
+     "m": "pts",
+     "k": 10,
+     "cote": 1.26,
+     "estim": false,
+     "p": 0.863,
      "res": null
     }
    ],
