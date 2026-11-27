@@ -24,15 +24,15 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Tester le calcul ROI du backtest
-        run: python -m unittest -v test_backtest.py
-
       - name: Installer les dependances
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           sudo apt-get install -y -qq poppler-utils
           command -v pdftotext || { echo "ERREUR : pdftotext manquant"; exit 1; }
+
+      - name: Tester le backtest et l’historique des pronostics
+        run: python -m unittest -v test_backtest.py test_history_context.py
 
       - name: Lancer le bot NBA
         env:

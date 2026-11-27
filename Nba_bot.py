@@ -813,7 +813,7 @@ def absents_equipe(idx, tid, actifs_statut, jour_et):
         rows = [x["row"] for x in l[-10:]]
         res.append({"aid": aid, "pts": moyenne([r[4] for r in rows]), "reb": moyenne([r[5] for r in rows]),
                     "ast": moyenne([r[6] for r in rows]), "tpm": moyenne([r[7] for r in rows]),
-                    "usage": moyenne([r[8] + 0.44 * r[9] + r[10] for r in rows])})
+                    "usage": moyenne([r[8] + 0.44 * r[9] + r[10] for r in rows]), "statut": st})
     return res
 
 
@@ -966,6 +966,18 @@ def candidats(idx, matchs, props, statuts, commentaires=None):
 
     noms = idx["cache"]["noms"]
     commentaires = commentaires or {}
+    absents_historiques = {
+        tid: [
+            {
+                "aid": str(absent["aid"]),
+                "nom": noms.get(absent["aid"], [str(absent["aid"])])[0],
+                "statut": absent.get("statut") or None,
+                "commentaire": commentaires.get(absent["aid"]) or None,
+            }
+            for absent in absents
+        ]
+        for tid, absents in ctx["absents"].items()
+    }
     res = []
     for mt in matchs:
         pm = props.get(mt["id"]) or {}
@@ -1000,7 +1012,8 @@ def candidats(idx, matchs, props, statuts, commentaires=None):
                             continue
                         res.append({
                             "eid": mt["id"], "aid": aid, "nom": noms.get(aid, [aid])[0],
-                            "eq": mt[cote_eq]["abr"], "adv": adv["abr"], "dom": cote_eq == "dom",
+                            "eq": mt[cote_eq]["abr"], "adv": adv["abr"], "adv_id": adv["id"],
+                            "dom": cote_eq == "dom",
                             "m": m, "k": int(k), "cote": cote, "estim": estimee,
                             "p": p, "p_mod": p_mod, "value": p * cote - 1, "mu": mu, "mp": mp,
                             "moy10": pr[m]["10"], "hits10": sum(1 for v in pr[m]["vals10"] if v >= k),
@@ -1010,6 +1023,7 @@ def candidats(idx, matchs, props, statuts, commentaires=None):
                             "titulaire": pr["titulaire"], "min_5": pr["min_5"],
                             "min_std_5": pr["min_std_5"], "min_plancher_5": pr["min_plancher_5"],
                             "trous": matchs_manques(idx, pr),
+                            "absents_coequipiers": absents_historiques.get(tid, []),
                             "spread": mt.get("spread"), "fav": mt.get("fav"),
                         })
     return res
@@ -1296,7 +1310,19 @@ def sauver_historique(h):
 def pick_dict(c, jour, ticket):
     return {"date": jour, "ticket": ticket, "eid": c["eid"], "aid": c["aid"], "nom": c["nom"],
             "eq": c["eq"], "m": c["m"], "k": c["k"], "cote": c["cote"], "estim": c["estim"],
-            "p": round(c["p"], 3), "res": None}
+            "p": round(c["p"], 3), "res": None,
+            "projection_moyenne": round(c["mu"], 2) if c.get("mu") is not None else None,
+            "minutes_projetees": round(c["mp"], 1) if c.get("mp") is not None else None,
+            "minutes_l5": round(c["min_5"], 1) if c.get("min_5") is not None else None,
+            "minutes_std_l5": round(c["min_std_5"], 1) if c.get("min_std_5") is not None else None,
+            "minutes_min_l5": round(c["min_plancher_5"], 1) if c.get("min_plancher_5") is not None else None,
+            "titulaire": c.get("titulaire"),
+            "adversaire": c.get("adv"), "adversaire_id": c.get("adv_id"),
+            "statut_blessure": c.get("statut") or None,
+            "commentaire_blessure": c.get("commentaire") or None,
+            "absents_coequipiers": c.get("absents_coequipiers", []),
+            "notes_projection": c.get("notes", []),
+            "proba_modele": round(c["p_mod"], 3) if c.get("p_mod") is not None else None}
 
 
 def journaliser(h, jour, solides, fun, safe):
